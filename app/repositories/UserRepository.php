@@ -1,6 +1,6 @@
 <?php
 
-include_once __DIR__ . '/../models/Database.php';
+include_once __DIR__ . '/../core/Database.php';
 include_once __DIR__ . '/../models/User.php';
 
 class UserRepository
@@ -14,7 +14,7 @@ class UserRepository
 
   public function getUserByEmail(string $email)
   {
-    $query = "SELECT * FROM JOURNASTAGE_USER WHERE email = :email";
+    $query = "SELECT * FROM USER WHERE email = :email";
     $stmt = $this->db->prepare($query);
     $stmt->bindParam(':email', $email);
     $stmt->execute();
@@ -41,7 +41,7 @@ class UserRepository
 
   public function getUserById(int $idUser)
   {
-    $query = "SELECT * FROM JOURNASTAGE_USER WHERE id_user = :id_user";
+    $query = "SELECT * FROM USER WHERE id_user = :id_user";
     $stmt = $this->db->prepare($query);
     $stmt->bindParam(':id_user', $idUser);
     $stmt->execute();
@@ -68,7 +68,7 @@ class UserRepository
 
   public function changeUserPassword(int $idUser, string $newPassword): bool
   {
-    $query = "UPDATE JOURNASTAGE_USER SET password = :password WHERE id_user = :id_user";
+    $query = "UPDATE USER SET password = :password WHERE id_user = :id_user";
 
     try {
       $stmt = $this->db->prepare($query);
@@ -86,7 +86,7 @@ class UserRepository
   {
     $temporaryStatus = 0;
 
-    $query = "UPDATE JOURNASTAGE_USER SET temporary_password = :temporary_password WHERE id_user = :id_user";
+    $query = "UPDATE USER SET temporary_password = :temporary_password WHERE id_user = :id_user";
 
     try {
       $stmt = $this->db->prepare($query);
@@ -102,7 +102,7 @@ class UserRepository
 
   public function resetUserPassword(int $idUser, string $password): bool
   {
-    $query = "UPDATE JOURNASTAGE_USER
+    $query = "UPDATE USER
               SET password = :password,
               temporary_password = 1
               WHERE id_user = :id_user";

@@ -1,6 +1,6 @@
 <?php
 
-include_once __DIR__ . '/../models/Database.php';
+include_once __DIR__ . '/../core/Database.php';
 include_once __DIR__ . '/../models/Class.php';
 
 class ClassRepository
@@ -15,17 +15,17 @@ class ClassRepository
   public function getAllClasses(): array
   {
     $query = 'SELECT
-              JOURNASTAGE_CLASS.id_class AS class_id,
-              JOURNASTAGE_CLASS.public_id AS class_public_id,
-              JOURNASTAGE_CLASS.name AS class_name,
-              JOURNASTAGE_CLASS.year_number AS class_year_number,
-              JOURNASTAGE_SCHOOL.id_school AS school_id,
-              JOURNASTAGE_SCHOOL.public_id AS school_public_id,
-              JOURNASTAGE_SCHOOL.name AS school_name,
-              JOURNASTAGE_SCHOOL.city AS school_city,
-              JOURNASTAGE_SCHOOL.department_number AS school_department_number
-              FROM JOURNASTAGE_CLASS, JOURNASTAGE_SCHOOL
-              WHERE JOURNASTAGE_CLASS.school_id = JOURNASTAGE_SCHOOL.id_school';
+              CLASS.id_class AS class_id,
+              CLASS.public_id AS class_public_id,
+              CLASS.name AS class_name,
+              CLASS.year_number AS class_year_number,
+              SCHOOL.id_school AS school_id,
+              SCHOOL.public_id AS school_public_id,
+              SCHOOL.name AS school_name,
+              SCHOOL.city AS school_city,
+              SCHOOL.department_number AS school_department_number
+              FROM CLASS, SCHOOL
+              WHERE CLASS.school_id = SCHOOL.id_school';
 
     try {
       $stmt = $this->db->prepare($query);
@@ -52,19 +52,19 @@ class ClassRepository
   public function getClassByStudentId(int $studentId): array
   {
     $query = 'SELECT
-              JOURNASTAGE_CLASS.id_class AS class_id,
-              JOURNASTAGE_CLASS.public_id AS class_public_id,
-              JOURNASTAGE_CLASS.name AS class_name,
-              JOURNASTAGE_CLASS.year_number AS class_year_number,
-              JOURNASTAGE_SCHOOL.id_school AS school_id,
-              JOURNASTAGE_SCHOOL.public_id AS school_public_id,
-              JOURNASTAGE_SCHOOL.name AS school_name,
-              JOURNASTAGE_SCHOOL.city AS school_city,
-              JOURNASTAGE_SCHOOL.department_number AS school_department_number
-              FROM JOURNASTAGE_USER, JOURNASTAGE_CLASS, JOURNASTAGE_SCHOOL
-              WHERE JOURNASTAGE_USER.student_class_id = JOURNASTAGE_CLASS.id_class
-              AND JOURNASTAGE_CLASS.school_id = JOURNASTAGE_SCHOOL.id_school
-              AND JOURNASTAGE_USER.id_user = :studentId';
+              CLASS.id_class AS class_id,
+              CLASS.public_id AS class_public_id,
+              CLASS.name AS class_name,
+              CLASS.year_number AS class_year_number,
+              SCHOOL.id_school AS school_id,
+              SCHOOL.public_id AS school_public_id,
+              SCHOOL.name AS school_name,
+              SCHOOL.city AS school_city,
+              SCHOOL.department_number AS school_department_number
+              FROM USER, CLASS, SCHOOL
+              WHERE USER.student_class_id = CLASS.id_class
+              AND CLASS.school_id = SCHOOL.id_school
+              AND USER.id_user = :studentId';
 
     try {
       $stmt = $this->db->prepare($query);
@@ -108,24 +108,24 @@ class ClassRepository
   public function getClassByTeacherId(int $teacherId, ?bool $groupedBySchool = false): array
   {
     $query = 'SELECT
-              JOURNASTAGE_CLASS.id_class AS class_id,
-              JOURNASTAGE_CLASS.public_id AS class_public_id,
-              JOURNASTAGE_CLASS.name AS class_name,
-              JOURNASTAGE_CLASS.year_number AS class_year_number,
-              JOURNASTAGE_SCHOOL.id_school AS school_id,
-              JOURNASTAGE_SCHOOL.public_id AS school_public_id,
-              JOURNASTAGE_SCHOOL.name AS school_name,
-              JOURNASTAGE_SCHOOL.city AS school_city,
-              JOURNASTAGE_SCHOOL.department_number AS school_department_number,
+              CLASS.id_class AS class_id,
+              CLASS.public_id AS class_public_id,
+              CLASS.name AS class_name,
+              CLASS.year_number AS class_year_number,
+              SCHOOL.id_school AS school_id,
+              SCHOOL.public_id AS school_public_id,
+              SCHOOL.name AS school_name,
+              SCHOOL.city AS school_city,
+              SCHOOL.department_number AS school_department_number,
               (
                 SELECT COUNT(*) 
-                FROM JOURNASTAGE_USER 
-                WHERE JOURNASTAGE_USER.student_class_id = JOURNASTAGE_CLASS.id_class
+                FROM USER 
+                WHERE USER.student_class_id = CLASS.id_class
               ) AS student_count
-              FROM JOURNASTAGE_TEACH, JOURNASTAGE_CLASS, JOURNASTAGE_SCHOOL
-              WHERE JOURNASTAGE_TEACH.class_id = JOURNASTAGE_CLASS.id_class
-              AND JOURNASTAGE_CLASS.school_id = JOURNASTAGE_SCHOOL.id_school
-              AND JOURNASTAGE_TEACH.teacher_id = :teacherId';
+              FROM TEACH, CLASS, SCHOOL
+              WHERE TEACH.class_id = CLASS.id_class
+              AND CLASS.school_id = SCHOOL.id_school
+              AND TEACH.teacher_id = :teacherId';
 
     try {
       $stmt = $this->db->prepare($query);
@@ -199,23 +199,23 @@ class ClassRepository
   public function getClassByPublicId(string $publicId): ?ClassModel
   {
     $query = 'SELECT
-              JOURNASTAGE_CLASS.id_class AS class_id,
-              JOURNASTAGE_CLASS.public_id AS class_public_id,
-              JOURNASTAGE_CLASS.name AS class_name,
-              JOURNASTAGE_CLASS.year_number AS class_year_number,
-              JOURNASTAGE_SCHOOL.id_school AS school_id,
-              JOURNASTAGE_SCHOOL.public_id AS school_public_id,
-              JOURNASTAGE_SCHOOL.name AS school_name,
-              JOURNASTAGE_SCHOOL.city AS school_city,
-              JOURNASTAGE_SCHOOL.department_number AS school_department_number,
+              CLASS.id_class AS class_id,
+              CLASS.public_id AS class_public_id,
+              CLASS.name AS class_name,
+              CLASS.year_number AS class_year_number,
+              SCHOOL.id_school AS school_id,
+              SCHOOL.public_id AS school_public_id,
+              SCHOOL.name AS school_name,
+              SCHOOL.city AS school_city,
+              SCHOOL.department_number AS school_department_number,
               (
                 SELECT COUNT(*) 
-                FROM JOURNASTAGE_USER 
-                WHERE JOURNASTAGE_USER.student_class_id = JOURNASTAGE_CLASS.id_class
+                FROM USER 
+                WHERE USER.student_class_id = CLASS.id_class
               ) AS student_count
-              FROM JOURNASTAGE_CLASS, JOURNASTAGE_SCHOOL
-              WHERE JOURNASTAGE_CLASS.school_id = JOURNASTAGE_SCHOOL.id_school
-              AND JOURNASTAGE_CLASS.public_id = :publicId';
+              FROM CLASS, SCHOOL
+              WHERE CLASS.school_id = SCHOOL.id_school
+              AND CLASS.public_id = :publicId';
 
     try {
       $stmt = $this->db->prepare($query);
@@ -251,7 +251,7 @@ class ClassRepository
   public function verifyTeacherInClass(int $teacherId, int $classId): bool
   {
     $query = 'SELECT *
-              FROM JOURNASTAGE_TEACH
+              FROM TEACH
               WHERE teacher_id = :teacherId
               AND class_id = :classId';
 
@@ -277,10 +277,10 @@ class ClassRepository
   public function verifyTeacherTeachingStudent(int $teacherId, int $studentId): bool
   {
     $query = 'SELECT id_user
-              FROM JOURNASTAGE_TEACH, JOURNASTAGE_USER
-              WHERE JOURNASTAGE_TEACH.class_id = JOURNASTAGE_USER.student_class_id
-              AND JOURNASTAGE_TEACH.teacher_id = :teacherId
-              AND JOURNASTAGE_USER.id_user = :studentId';
+              FROM TEACH, USER
+              WHERE TEACH.class_id = USER.student_class_id
+              AND TEACH.teacher_id = :teacherId
+              AND USER.id_user = :studentId';
     try {
       $stmt = $this->db->prepare($query);
 
@@ -303,19 +303,19 @@ class ClassRepository
   public function getAllStudentsByClassId(int $classId): array
   {
     $query = 'SELECT
-              JOURNASTAGE_USER.id_user AS student_id,
-              JOURNASTAGE_USER.public_id AS student_public_id,
-              JOURNASTAGE_USER.last_name AS student_last_name,
-              JOURNASTAGE_USER.first_name AS student_first_name,
-              JOURNASTAGE_USER.birth_date AS student_birth_date,
+              USER.id_user AS student_id,
+              USER.public_id AS student_public_id,
+              USER.last_name AS student_last_name,
+              USER.first_name AS student_first_name,
+              USER.birth_date AS student_birth_date,
               (
                 SELECT COUNT(*) 
-                FROM JOURNASTAGE_REPORT 
-                WHERE JOURNASTAGE_REPORT.student_id = JOURNASTAGE_USER.id_user
+                FROM REPORT 
+                WHERE REPORT.student_id = USER.id_user
               ) AS report_count,
-              JOURNASTAGE_USER.student_class_id AS student_class_id
-              FROM JOURNASTAGE_USER
-              WHERE JOURNASTAGE_USER.student_class_id = :classId';
+              USER.student_class_id AS student_class_id
+              FROM USER
+              WHERE USER.student_class_id = :classId';
 
     try {
       $stmt = $this->db->prepare($query);
@@ -334,19 +334,19 @@ class ClassRepository
   public function getStudentByPublicId(string $publicId): ?array
   {
     $query = 'SELECT
-              JOURNASTAGE_USER.id_user AS student_id,
-              JOURNASTAGE_USER.public_id AS student_public_id,
-              JOURNASTAGE_USER.last_name AS student_last_name,
-              JOURNASTAGE_USER.first_name AS student_first_name,
-              JOURNASTAGE_USER.birth_date AS student_birth_date,
+              USER.id_user AS student_id,
+              USER.public_id AS student_public_id,
+              USER.last_name AS student_last_name,
+              USER.first_name AS student_first_name,
+              USER.birth_date AS student_birth_date,
               (
                 SELECT COUNT(*) 
-                FROM JOURNASTAGE_REPORT 
-                WHERE JOURNASTAGE_REPORT.student_id = JOURNASTAGE_USER.id_user
+                FROM REPORT 
+                WHERE REPORT.student_id = USER.id_user
               ) AS report_count,
-              JOURNASTAGE_USER.student_class_id AS student_class_id
-              FROM JOURNASTAGE_USER
-              WHERE JOURNASTAGE_USER.public_id = :publicId';
+              USER.student_class_id AS student_class_id
+              FROM USER
+              WHERE USER.public_id = :publicId';
 
     try {
       $stmt = $this->db->prepare($query);
@@ -368,7 +368,7 @@ class ClassRepository
 
   public function removeClassToStudent(int $studentId): bool
   {
-    $query = 'UPDATE JOURNASTAGE_USER SET student_class_id = NULL WHERE id_user = :studentId';
+    $query = 'UPDATE USER SET student_class_id = NULL WHERE id_user = :studentId';
 
     try {
       $stmt = $this->db->prepare($query);
@@ -383,7 +383,7 @@ class ClassRepository
 
   public function removeClassesToTeacher(int $teacherId): bool
   {
-    $query = 'DELETE FROM JOURNASTAGE_TEACH WHERE teacher_id = :teacherId';
+    $query = 'DELETE FROM TEACH WHERE teacher_id = :teacherId';
 
     try {
       $stmt = $this->db->prepare($query);
@@ -398,7 +398,7 @@ class ClassRepository
 
   public function addClassToStudent(int $studentId, int $classId): bool
   {
-    $query = 'UPDATE JOURNASTAGE_USER SET student_class_id = :classId WHERE id_user = :studentId';
+    $query = 'UPDATE USER SET student_class_id = :classId WHERE id_user = :studentId';
 
     try {
       $stmt = $this->db->prepare($query);
@@ -414,7 +414,7 @@ class ClassRepository
 
   public function addClassesToTeacher(int $teacherId, array $classIds): bool
   {
-    $query = 'INSERT INTO JOURNASTAGE_TEACH (teacher_id, class_id) VALUES (:teacherId, :classId)';
+    $query = 'INSERT INTO TEACH (teacher_id, class_id) VALUES (:teacherId, :classId)';
 
     try {
       $stmt = $this->db->prepare($query);

@@ -25,7 +25,7 @@ class Router
   // DISPATCH
   public function dispatch(string $method, string $uri): void
   {
-    $prefix = 'FEZANDELLECAMILLE/projects/JournaStage';
+    $prefix = 'JournaStage';
     $uri = trim(parse_url($uri, PHP_URL_PATH), '/');
 
     if (strpos($uri, $prefix) === 0) {

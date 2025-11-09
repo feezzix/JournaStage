@@ -10,7 +10,7 @@ class Database
   public static function getInstance(): PDO
   {
     if (self::$instance === null) {
-      $pdo = require __DIR__ . '/../../../../config/database.php';
+      $pdo = require __DIR__ . '/EnvLoader.php';
 
       self::$instance = $pdo;
     }

@@ -1,6 +1,6 @@
 <?php
 
-include_once __DIR__ . '/../models/Database.php';
+include_once __DIR__ . '/../core/Database.php';
 include_once __DIR__ . '/../models/Session.php';
 
 class SessionRepository
@@ -18,7 +18,7 @@ class SessionRepository
     $createdAt = date('Y-m-d H:i:s');
     $expiresAt = date('Y-m-d H:i:s', $sessionExpiresAt);
 
-    $query = "INSERT INTO JOURNASTAGE_SESSION 
+    $query = "INSERT INTO SESSION 
     (
       user_id,
       session_token,
@@ -45,7 +45,7 @@ class SessionRepository
 
   public function getSessionByToken(string $sessionToken): ?Session
   {
-    $query = "SELECT * FROM JOURNASTAGE_SESSION WHERE session_token = :session_token";
+    $query = "SELECT * FROM SESSION WHERE session_token = :session_token";
 
     $stmt = $this->db->prepare($query);
 
@@ -69,7 +69,7 @@ class SessionRepository
 
   public function deleteSession(string $sessionToken): void
   {
-    $query = "DELETE FROM JOURNASTAGE_SESSION WHERE session_token = :session_token";
+    $query = "DELETE FROM SESSION WHERE session_token = :session_token";
 
     $stmt = $this->db->prepare($query);
 

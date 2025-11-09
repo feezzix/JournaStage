@@ -1,6 +1,6 @@
 <?php
 
-include_once __DIR__ . '/../models/Database.php';
+include_once __DIR__ . '/../core/Database.php';
 include_once __DIR__ . '/../models/Report.php';
 
 class ReportRepository
@@ -17,7 +17,7 @@ class ReportRepository
     $publicId = $this->generateUniquePublicId();
     $reportDate = date('Y-m-d H:i:s', strtotime($date));
 
-    $query = "INSERT INTO JOURNASTAGE_REPORT 
+    $query = "INSERT INTO REPORT 
     (
       public_id,
       title,
@@ -50,7 +50,7 @@ class ReportRepository
 
   public function getAllReportsByStudentId(int $studentId): array
   {
-    $query = "SELECT * FROM JOURNASTAGE_REPORT WHERE student_id = :student_id ORDER BY date DESC";
+    $query = "SELECT * FROM REPORT WHERE student_id = :student_id ORDER BY date DESC";
 
     try {
       $stmt = $this->db->prepare($query);
@@ -80,7 +80,7 @@ class ReportRepository
 
   public function getReportByPublicId(string $publicId): ?Report
   {
-    $query = "SELECT * FROM JOURNASTAGE_REPORT WHERE public_id = :public_id";
+    $query = "SELECT * FROM REPORT WHERE public_id = :public_id";
 
     try {
       $stmt = $this->db->prepare($query);
@@ -110,7 +110,7 @@ class ReportRepository
   {
     $reportDate = date('Y-m-d H:i:s', strtotime($date));
 
-    $query = "UPDATE JOURNASTAGE_REPORT SET title = :title, date = :date, content = :content WHERE id_report = :id_report";
+    $query = "UPDATE REPORT SET title = :title, date = :date, content = :content WHERE id_report = :id_report";
 
     try {
       $stmt = $this->db->prepare($query);
@@ -129,7 +129,7 @@ class ReportRepository
 
   public function deleteReport(int $reportId): bool
   {
-    $query = "DELETE FROM JOURNASTAGE_REPORT WHERE id_report = :id_report";
+    $query = "DELETE FROM REPORT WHERE id_report = :id_report";
 
     try {
       $stmt = $this->db->prepare($query);
@@ -148,7 +148,7 @@ class ReportRepository
     do {
       $publicId = bin2hex(random_bytes(4));
 
-      $query = "SELECT COUNT(*) FROM JOURNASTAGE_REPORT WHERE public_id = :public_id";
+      $query = "SELECT COUNT(*) FROM REPORT WHERE public_id = :public_id";
       $stmt = $this->db->prepare($query);
 
       $stmt->bindParam(':public_id', $publicId);

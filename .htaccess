@@ -1,8 +1,8 @@
 # Autoriser la réécriture d'URL
 RewriteEngine On
 
-# Réécrire les URL pour enlever le préfixe /FEZANDELLECAMILLE/projects/JournaStage/
-RewriteBase /FEZANDELLECAMILLE/projects/JournaStage/
+# Réécrire les URL pour enlever le préfixe /JournaStage/
+RewriteBase /JournaStage/
 
 # Si l'URL ne correspond pas à un fichier existant, rediriger vers index.php
 RewriteCond %{REQUEST_FILENAME} !-f
