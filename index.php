@@ -60,9 +60,6 @@ $router->get('/classe', [ProfessorController::class, 'viewClass'], fn() => $user
 
 $router->get('/etudiant', [ProfessorController::class, 'viewStudent'], fn() => $userStatus === 1);
 
-// admin
-$router->get('/admin', [AdminController::class, 'adminDashboard'], fn() => $admin);
-
 
 // *** DISPATCHER ***
 

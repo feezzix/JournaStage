@@ -26,10 +26,16 @@ class Router
   public function dispatch(string $method, string $uri): void
   {
     $prefix = 'JournaStage';
-    $uri = trim(parse_url($uri, PHP_URL_PATH), '/');
+    $uri = parse_url($uri, PHP_URL_PATH);
 
-    if (strpos($uri, $prefix) === 0) {
-      $uri = substr($uri, strlen($prefix));
+    if (strpos(trim($uri, '/'), $prefix) === 0) {
+      $uri = '/' . ltrim(substr(trim($uri, '/'), strlen($prefix)), '/');
+    }
+
+    if ($uri === '/' || $uri === '') {
+      $uri = '';
+    } else {
+      $uri = '/' . ltrim($uri, '/');
     }
 
     $routes = $method === 'POST' ? $this->postRoutes : $this->getRoutes;
